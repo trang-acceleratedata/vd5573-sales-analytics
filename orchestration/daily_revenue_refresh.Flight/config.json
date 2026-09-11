@@ -1,0 +1,8 @@
+{
+  "schedule_cron": "0 6 * * *",
+  "DESTINATION_DATABASE": "ephm_sales_analytics",
+  "DBT_SCHEMA": "main",
+  "DBT_SELECT": "daily_revenue",
+  "GIT_REPO": "https://github.com/trang-acceleratedata/vd5573-sales-analytics.git",
+  "GIT_REVISION": "4f6ae681e7a6dcad1f2fedc8a9d845d674801623"
+}

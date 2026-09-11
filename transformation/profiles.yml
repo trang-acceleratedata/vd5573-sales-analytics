@@ -1,0 +1,8 @@
+dbt_motherduck:
+  outputs:
+    dev:
+      type: motherduck
+      database: "{{ env_var('VD_EPHM_MOTHERDUCK_DATABASE', 'analytics') }}"
+      schema: main
+      threads: 4
+  target: dev
