@@ -37,7 +37,7 @@ def checkout(repo: str, revision: str, destination: str) -> None:
 
 
 def write_profile(directory: str, database: str, schema: str) -> None:
-    """Write dbt profiles.yml with explicit database naming."""
+    """Write dbt profiles.yml with explicit database naming for MotherDuck."""
     with open(os.path.join(directory, "profiles.yml"), "w") as handle:
         handle.write(
             "flight:\n"
@@ -46,7 +46,8 @@ def write_profile(directory: str, database: str, schema: str) -> None:
             "    prod:\n"
             "      type: motherduck\n"
             f'      database: "{database}"\n'
-            f"      schema: {schema}\n")
+            f"      schema: {schema}\n"
+            "      threads: 4\n")
 
 
 def main() -> None:
@@ -72,12 +73,17 @@ def main() -> None:
     print("checked out revision:", revision)
     write_profile(profiles, database, schema)
 
-    from dbt.cli.main import dbtRunner
+    # Run dbt as subprocess to avoid import issues
+    result = subprocess.run(
+        ["dbt", "build", "--select", selector,
+         "--project-dir", project, "--profiles-dir", profiles, "--profile", "flight"],
+        capture_output=True, text=True)
 
-    result = dbtRunner().invoke(
-        ["build", "--select", selector,
-         "--project-dir", project, "--profiles-dir", profiles, "--profile", "flight"])
+    print(result.stdout)
+    if result.stderr:
+        print(result.stderr, file=sys.stderr)
 
+    # Check run_results.json for summary
     run_results = os.path.join(project, "target", "run_results.json")
     if os.path.exists(run_results):
         with open(run_results) as handle:
@@ -85,11 +91,9 @@ def main() -> None:
         print("dbt nodes:", len(summary.get("results", [])),
               "elapsed:", summary.get("elapsed_time"))
 
-    # Escalate failure: dbtRunner doesn't raise on failure
-    if not result.success:
-        failed = [node.node.unique_id for node in (result.result or [])
-                  if str(node.status) not in ("success", "pass")]
-        print("dbt FAILED:", ", ".join(failed) or "see logs", file=sys.stderr)
+    # Escalate failure
+    if result.returncode != 0:
+        print(f"dbt FAILED with exit code {result.returncode}", file=sys.stderr)
         sys.exit(1)
     print("dbt build succeeded for selector:", selector)
 
