@@ -1,5 +1,5 @@
 {
-  "GIT_REPO": "https://github.com/your-org/your-repo.git",
+  "GIT_REPO": "https://github.com/trang-acceleratedata/vd5573-sales-analytics.git",
   "GIT_REVISION": "main",
   "DESTINATION_DATABASE": "sales_analytics",
   "DBT_SCHEMA": "public",
