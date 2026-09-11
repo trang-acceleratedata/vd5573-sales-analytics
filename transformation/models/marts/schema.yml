@@ -1,0 +1,8 @@
+version: 2
+
+models:
+  - name: daily_revenue
+    description: Completed-order revenue per day.
+    columns:
+      - name: revenue_date
+        tests: [unique, not_null]
