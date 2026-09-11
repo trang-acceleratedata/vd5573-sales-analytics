@@ -1,0 +1,10 @@
+{
+  "GIT_REPO": "https://github.com/your-org/your-repo.git",
+  "GIT_REVISION": "main",
+  "DESTINATION_DATABASE": "sales_analytics",
+  "DBT_SCHEMA": "public",
+  "DBT_SELECT": "models.sales_analytics.marts.daily_revenue",
+  "DBT_PROJECT_SUBDIR": "transformation",
+  "schedule_cron": "0 6 * * *",
+  "schedule_timezone": "Europe/London"
+}
