@@ -89,11 +89,12 @@ def main() -> None:
 
     # One deliberate `build --select` per Flight: dbt owns the model graph, and
     # individual models are never separate orchestration activities.
+    dbt_project_dir = os.path.join(project, "transformation")
     result = dbtRunner().invoke(
         ["build", "--select", selector,
-         "--project-dir", project, "--profiles-dir", profiles, "--profile", "flight"])
+         "--project-dir", dbt_project_dir, "--profiles-dir", profiles, "--profile", "flight"])
 
-    run_results = os.path.join(project, "target", "run_results.json")
+    run_results = os.path.join(dbt_project_dir, "target", "run_results.json")
     if os.path.exists(run_results):
         with open(run_results) as handle:
             summary = json.load(handle)
