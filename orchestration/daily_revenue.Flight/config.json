@@ -1,0 +1,8 @@
+{
+  "DESTINATION_DATABASE": "sales_analytics",
+  "DBT_SCHEMA": "analytics",
+  "DBT_SELECT": "daily_revenue+",
+  "GIT_REPO": "https://github.com/trang-acceleratedata/vd5573-sales-analytics.git",
+  "GIT_REVISION": "4f6ae681e7a6dcad1f2fedc8a9d845d674801623",
+  "schedule_cron": "0 5 * * *"
+}
